@@ -1,0 +1,10 @@
+---------- BOLETA -----------
+Fecha: 30/11/2024	13:58
+Detalle del cobro: Coca cola - $1500.0
+Hamburguesa doble - $11590.0
+Polera cerveza cuello negro - $11990.0
+
+Valor neto: $25080
+Propina (10.0%): $2508
+Valor total: $27588
+-----------------------------

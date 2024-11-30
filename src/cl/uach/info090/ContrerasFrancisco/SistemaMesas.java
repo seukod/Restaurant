@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Clase que representa el sistema de gestión de mesas en un restaurante.
+ * Permite la selección de mesas, la adición de pedidos, y la generación de boletas.
+ * 
+ * @author Francisco Contreras
+ */
 @SuppressWarnings("serial")
 public class SistemaMesas extends JFrame implements ActionListener {
 	// Singleton instance
@@ -36,8 +41,10 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	private Mesa[] mesas;
 
 	Border borde = BorderFactory.createLineBorder(Color.BLACK, 3);
-	
-	// Constructor privado para Singleton
+	/**
+     * Constructor privado para el patrón Singleton.
+     * Inicializa la ventana principal y sus componentes.
+     */
 	private SistemaMesas() {
 		super(" Sistema de mesas ");
 		try {
@@ -55,13 +62,18 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		// Inicializar y configurar componentes
 		inicializarComponentes();
 	}
-	
-	// Método para obtener la instancia Singleton
+	/**
+     * Método para obtener la instancia Singleton del sistema de mesas.
+     *
+     * @return La instancia única de SistemaMesas.
+     */
 	public static SistemaMesas getInstance() {
 		return sistema;
 	}
 
-	// Inicialización de todos los componentes
+	/**
+     * Inicializa todos los componentes de la ventana principal.
+     */
 	private void inicializarComponentes() {
 		panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());
@@ -123,6 +135,10 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		panelSubtotal.add(botonCerrar, BorderLayout.SOUTH);
 				
 	}
+	/**
+     * Carga los botones de las mesas en el panel de mesas.
+     */
+	 
 
 	// Método para cargar los botones de mesas
 	private void cargarBotonesMesas() {
@@ -141,16 +157,22 @@ public class SistemaMesas extends JFrame implements ActionListener {
 			panelMesas.add(botonesMesas[i]);
 		}
 	}
-
-	// Método main para ejecutar el programa
+	 /**
+     * Método main para ejecutar el programa
+     *
+     * @param args Argumentos de línea de comandos.
+     */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			SistemaMesas.getInstance().setVisible(true);
 		});
 	}
 
-	// Implementación del método actionPerformed
-
+	/**
+     * Maneja los eventos de acción de los botones.
+     *
+     * @param e El evento de acción.
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    JButton botonPresionado = (JButton) e.getSource();
@@ -182,6 +204,10 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	        System.out.println("Mesa seleccionada: " + textoBoton);
 	    }
 	}
+	/**
+     * Abre un diálogo para agregar un ítem a la mesa seleccionada.
+     * Permite al usuario seleccionar un ítem de tipo Bebestible, Comida u Otro.
+     */
 	private void abrirDialogoAgregarItem() {
 	    ArrayList<ItemConsumo> itemsDisponibles = cargarItemsDesdeArchivo("data/items_consumo.txt");
 
@@ -239,8 +265,7 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	    JButton btnOk = new JButton("Ok");
 	    JButton btnCancelar = new JButton("Cancelar");
 
-	    // Listeners para los combos
-	    final JComboBox<?>[] comboSeleccionado = {null};
+
 
 	    btnOk.addActionListener(ev -> {
 	        // Agregar los ítems seleccionados
@@ -294,7 +319,12 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	}
 
 
-	// Método para mostrar la mesa seleccionada en el panel derecho
+	 /**
+     * Muestra la información de la mesa seleccionada en el panel derecho.
+     * Actualiza la tabla con los ítems consumidos y el subtotal correspondiente.
+     *
+     * @param m La mesa cuya información se desea mostrar.
+     */
 	private void mostrarMesa(Mesa m) {
 	    // Agregar el panel derecho si no está ya en el panel principal
 	    if (panelPrincipal.getComponentCount() < 3) {
@@ -332,7 +362,15 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	    // Refrescar el panel para mostrar cambios
 	    panelDer.revalidate();
 	    panelDer.repaint();
+	    
 	}
+	 /**
+     * Carga los ítems de consumo desde un archivo de texto.
+     * Cada línea del archivo debe contener el ID, nombre y precio del ítem.
+     *
+     * @param rutaArchivo La ruta del archivo desde el cual se cargarán los ítems.
+     * @return Una lista de ítems de consumo disponibles.
+     */
 	private ArrayList<ItemConsumo> cargarItemsDesdeArchivo(String rutaArchivo) {
 	    ArrayList<ItemConsumo> itemsDisponibles = new ArrayList<>();
 	    try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
@@ -387,7 +425,13 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	    }
 	    return itemsDisponibles;
 	}
-
+	/**
+     * Guarda la boleta generada en un archivo de texto.
+     * El nombre del archivo se basa en la fecha y la ID de la mesa.
+     *
+     * @param boleta La boleta que se desea guardar.
+     * @param idMesa El ID de la mesa asociada a la boleta.
+     */
 	private void guardarBoletaEnArchivo(Boleta boleta, int idMesa) {
 	    // Obtener la fecha actual para formatear el nombre del archivo
 	    SimpleDateFormat formatoNombreArchivo = new SimpleDateFormat("yyyyMMdd.HHmm");
