@@ -70,6 +70,7 @@ public class Mesa extends JButton {
 		double neto = calcularTotalConsumo();
 		// Generar la boleta usando el creadorBoleta
 		Boleta boleta = creadorBoleta.generarBoleta("Mesa " + id, detalle.toString(), neto);
+		
 		// Vaciar la lista de items después de generar la boleta
 		items.clear();
 

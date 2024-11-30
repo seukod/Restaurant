@@ -26,19 +26,19 @@ public class BoletaCL extends Boleta{
 
 	@Override
 	public String detalle() {
-		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy\tHH:mm");
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("---------- BOLETA -----------\n");
-        sb.append("Fecha: ").append(formatoFecha.format(fecha)).append("\n");
-        sb.append("Detalle del cobro: ").append(detalleCobro).append("\n");
-        sb.append("Valor neto: $").append(String.format("%.2f", valorNeto)).append("\n");
-        sb.append("Propina (").append(porcentajePropina).append("%): $")
-          .append(String.format("%.2f", valorNeto * (porcentajePropina / 100))).append("\n");
-        sb.append("Valor total: $").append(String.format("%.2f", valorTotal)).append("\n");
-        sb.append("-----------------------------\n");
-        
-        return sb.toString();
+	    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy\tHH:mm");
+	    StringBuilder sb = new StringBuilder();
+	    
+	    sb.append("---------- BOLETA -----------\n");
+	    sb.append("Fecha: ").append(formatoFecha.format(fecha)).append("\n");
+	    sb.append("Detalle del cobro: ").append(detalleCobro).append("\n");
+	    sb.append("Valor neto: $").append(String.format("%.0f", valorNeto)).append("\n");
+	    sb.append("Propina (").append(porcentajePropina).append("%): $")
+	      .append(String.format("%.0f", valorNeto * (porcentajePropina / 100))).append("\n");
+	    sb.append("Valor total: $").append(String.format("%.0f", valorTotal)).append("\n");
+	    sb.append("-----------------------------\n");
+	    
+	    return sb.toString();
 	}
 	
 }

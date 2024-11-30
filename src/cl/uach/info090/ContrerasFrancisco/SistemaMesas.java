@@ -63,12 +63,12 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		add(panelPrincipal);
 
 		// Inicializar el título
-		labelTitulo = new JLabel("Sistema de Mesas", SwingConstants.CENTER);
+		labelTitulo = new JLabel("MESAS", SwingConstants.CENTER);
 		
 		// Panel superior para título
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setLayout(new BorderLayout());
-		panelSuperior.add(labelTitulo, BorderLayout.NORTH);
+		panelSuperior.add(labelTitulo, BorderLayout.WEST);
 		panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
 
 		// Panel de mesas
@@ -89,10 +89,9 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(tablaPedidos);
 		panelDer.add(scrollPane, BorderLayout.CENTER);
 
-		// Panel de título y número de mesa
 		JPanel panelTitulo = new JPanel(new BorderLayout());
-		campoNumeroMesa = new JLabel("", SwingConstants.CENTER);
-		panelTitulo.add(campoNumeroMesa, BorderLayout.NORTH);
+		campoNumeroMesa = new JLabel("Mesa seleccionada: ", SwingConstants.CENTER);
+		panelTitulo.add(campoNumeroMesa, BorderLayout.WEST); // Cambiado a CENTER para que esté centrado
 		panelDer.add(panelTitulo, BorderLayout.NORTH);
 
 		// Botón "Agregar" en el panel derecho
@@ -100,7 +99,7 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		JButton botonAgregar = new JButton("Agregar");
 		botonAgregar.addActionListener(this);
 		panelBoton.add(botonAgregar);
-		panelDer.add(panelBoton, BorderLayout.NORTH);
+		panelTitulo.add(panelBoton, BorderLayout.SOUTH);
 		
 		
 		//agregar subtotal
@@ -125,13 +124,14 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		int cantidadMesas = 12; // Ejemplo de número de mesas
 		botonesMesas = new JButton[cantidadMesas];
 		mesas = new Mesa[cantidadMesas];
+		CreadorBoleta creadorBoleta = new CreadorBoletaCL();
 
 		for (int i = 0; i < cantidadMesas; i++) {
 			botonesMesas[i] = new JButton("Mesa " + (i + 1));
 			botonesMesas[i].setBackground(new Color(200, 150, 255));
 			botonesMesas[i].setForeground(Color.WHITE);
 			 
-			mesas[i] = new Mesa(i, null);
+			mesas[i] = new Mesa(i, creadorBoleta);
 			botonesMesas[i].addActionListener(this); // SistemaMesas actuará como listener
 			panelMesas.add(botonesMesas[i]);
 		}
@@ -151,7 +151,15 @@ public class SistemaMesas extends JFrame implements ActionListener {
 		JButton botonPresionado = (JButton) e.getSource();
 
 		if (botonPresionado.getText().equals("Cerrar pedido y generar boleta")) {
-			System.out.println("Cerrando pedido y generando boleta...");
+			if (mesaSeleccionada != null && mesaSeleccionada.enUso()) {
+	            Boleta boleta = mesaSeleccionada.cerrarMesa();
+	            JOptionPane.showMessageDialog(this, boleta.detalle(), "Boleta Generada", JOptionPane.INFORMATION_MESSAGE);
+	            // También puedes agregar lógica adicional aquí, como actualizar la interfaz
+	            subtotalLabel.setText("Subtotal: $0"); // Reiniciar subtotal
+	            mostrarMesa(mesaSeleccionada); // Actualizar la vista de la mesa
+	        } else {
+	            JOptionPane.showMessageDialog(this, "No hay pedidos en la mesa seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+	        }
 		} else if (botonPresionado.getText().equals("Agregar")) {
 			abrirDialogoAgregarItem(); // Abrir el diálogo de selección de ítems
 		} else {
@@ -293,13 +301,13 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	    for (ItemConsumo item : m.getItems()) {
 	        Object[] fila = { 
 	            item.getNombre(), 
-	            item.getPrecio(), 
+	            String.format("$%d", (int) item.getPrecio()), // Valor c/u sin decimales
 	            item.getCantidad(), 
-	            item.getPrecio() * item.getCantidad() 
+	            String.format("$%d", (int) (item.getPrecio() * item.getCantidad())) // Valor total sin decimales
 	        };
 	        double subtotal = m.calcularTotalConsumo();
 	        
-	        subtotalLabel.setText(String.format("Subtotal: $%.2f", subtotal));
+	        subtotalLabel.setText(String.format("Subtotal: $%d",(int)subtotal));
 	        modeloTabla.addRow(fila);
 	    }
 	    // Cambiar el color del botón de la mesa a naranja si tiene pedidos
