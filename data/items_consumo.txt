@@ -1,0 +1,8 @@
+B001,Cerveza Cuello Negro botella 350 cc,2600
+B002,Coca cola,1500
+B003,jugo de frutas,2800
+C001,Hamburguesa,8800
+C002,Hamburguesa doble,11590
+C003,Chorrillana,13800
+O001,Polera cerveza cuello negro,11990
+O002,vaso decorativo 350 cc,2670
