@@ -1,0 +1,9 @@
+---------- BOLETA -----------
+Fecha: 30/11/2024	12:45
+Detalle del cobro: Coca cola - $1500.0
+Hamburguesa - $8800.0
+
+Valor neto: $10300
+Propina (10.0%): $1030
+Valor total: $11330
+-----------------------------

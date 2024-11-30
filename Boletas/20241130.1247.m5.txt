@@ -1,0 +1,10 @@
+---------- BOLETA -----------
+Fecha: 30/11/2024	12:47
+Detalle del cobro: jugo de frutas - $2800.0
+Hamburguesa doble - $11590.0
+Polera cerveza cuello negro - $11990.0
+
+Valor neto: $26380
+Propina (10.0%): $2638
+Valor total: $29018
+-----------------------------

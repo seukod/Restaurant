@@ -1,0 +1,10 @@
+---------- BOLETA -----------
+Fecha: 30/11/2024	12:47
+Detalle del cobro: Cerveza Cuello Negro botella 350 cc - $2600.0
+Hamburguesa doble - $11590.0
+Polera cerveza cuello negro - $11990.0
+
+Valor neto: $26180
+Propina (10.0%): $2618
+Valor total: $28798
+-----------------------------

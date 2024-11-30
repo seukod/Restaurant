@@ -8,9 +8,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public class SistemaMesas extends JFrame implements ActionListener {
@@ -148,29 +153,34 @@ public class SistemaMesas extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton botonPresionado = (JButton) e.getSource();
+	    JButton botonPresionado = (JButton) e.getSource();
 
-		if (botonPresionado.getText().equals("Cerrar pedido y generar boleta")) {
-			if (mesaSeleccionada != null && mesaSeleccionada.enUso()) {
+	    if (botonPresionado.getText().equals("Cerrar pedido y generar boleta")) {
+	        if (mesaSeleccionada != null && mesaSeleccionada.enUso()) {
+	            // a) Invoca al método cerrarMesa() de la mesa seleccionada, y captura la boleta generada
 	            Boleta boleta = mesaSeleccionada.cerrarMesa();
 	            JOptionPane.showMessageDialog(this, boleta.detalle(), "Boleta Generada", JOptionPane.INFORMATION_MESSAGE);
-	            // También puedes agregar lógica adicional aquí, como actualizar la interfaz
-	            subtotalLabel.setText("Subtotal: $0"); // Reiniciar subtotal
+	            
+	            // b) Guarda la boleta generada en la carpeta /boletas
+	            guardarBoletaEnArchivo(boleta, mesaSeleccionada.getId());
+
+	            // Reiniciar subtotal
+	            subtotalLabel.setText("Subtotal: $0");
 	            mostrarMesa(mesaSeleccionada); // Actualizar la vista de la mesa
 	        } else {
 	            JOptionPane.showMessageDialog(this, "No hay pedidos en la mesa seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
 	        }
-		} else if (botonPresionado.getText().equals("Agregar")) {
-			abrirDialogoAgregarItem(); // Abrir el diálogo de selección de ítems
-		} else {
-			// Determinar la mesa seleccionada a partir del texto del botón
-			String textoBoton = botonPresionado.getText();
-			int numeroMesa = Integer.parseInt(textoBoton.split(" ")[1]) - 1;
+	    } else if (botonPresionado.getText().equals("Agregar")) {
+	        abrirDialogoAgregarItem(); // Abrir el diálogo de selección de ítems
+	    } else {
+	        // Determinar la mesa seleccionada a partir del texto del botón
+	        String textoBoton = botonPresionado.getText();
+	        int numeroMesa = Integer.parseInt(textoBoton.split(" ")[1]) - 1;
 
-			mesaSeleccionada = mesas[numeroMesa]; // Guardar la mesa seleccionada
-			mostrarMesa(mesaSeleccionada); // Llamar al método mostrarMesa con la mesa seleccionada
-			System.out.println("Mesa seleccionada: " + textoBoton);
-		}
+	        mesaSeleccionada = mesas[numeroMesa]; // Guardar la mesa seleccionada
+	        mostrarMesa(mesaSeleccionada); // Llamar al método mostrarMesa con la mesa seleccionada
+	        System.out.println("Mesa seleccionada: " + textoBoton);
+	    }
 	}
 	private void abrirDialogoAgregarItem() {
 	    ArrayList<ItemConsumo> itemsDisponibles = cargarItemsDesdeArchivo("data/items_consumo.txt");
@@ -378,7 +388,24 @@ public class SistemaMesas extends JFrame implements ActionListener {
 	    return itemsDisponibles;
 	}
 
+	private void guardarBoletaEnArchivo(Boleta boleta, int idMesa) {
+	    // Obtener la fecha actual para formatear el nombre del archivo
+	    SimpleDateFormat formatoNombreArchivo = new SimpleDateFormat("yyyyMMdd.HHmm");
+	    String nombreArchivo = formatoNombreArchivo.format(new Date()) + ".m" + (idMesa + 1) + ".txt";
+	    
+	    // Ruta donde se guardará la boleta
+	    String rutaArchivo = "boletas/" + nombreArchivo;
 
+	    // Crear el directorio si no existe
+
+	    // Escribir la boleta en el archivo
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivo))) {
+	        writer.write(boleta.detalle());
+	        writer.flush();
+	    } catch (IOException ex) {
+	        JOptionPane.showMessageDialog(this, "Error al guardar la boleta: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+	}
 
 
 }
